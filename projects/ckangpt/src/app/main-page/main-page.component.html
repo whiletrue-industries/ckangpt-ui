@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+    <span>CKAN-GPT</span>
+</mat-toolbar>
+<mat-grid-list cols="1" rowHeight="300px" gutterSize="8px">
+    <mat-grid-tile>
+        <app-text-input (next)='claims = $event'></app-text-input>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-accordion>
+    <mat-expansion-panel *ngFor='let claim of claims'>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{claim}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-claim-processor [claim]='claim'></app-claim-processor>
+    </mat-expansion-panel>
+</mat-accordion>

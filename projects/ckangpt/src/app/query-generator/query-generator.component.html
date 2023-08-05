@@ -1,0 +1,31 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+    <mat-panel-title>Generate DB queries</mat-panel-title>
+    <mat-panel-description *ngIf='working'>Processing</mat-panel-description>
+    <mat-panel-description *ngIf='found > 0'>Found {{found}}</mat-panel-description>
+    <mat-panel-description *ngIf='found === 0'>Failed</mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-card>
+        <mat-card-content>
+            <mat-list *ngIf='found > 0'>
+                <mat-list-item *ngFor='let i of results'>{{i}}</mat-list-item>
+            </mat-list>           
+            <mat-divider></mat-divider>
+        </mat-card-content>
+        <mat-card-footer *ngIf='working'>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </mat-card-footer>
+        <mat-card-footer *ngIf='found > 0'>
+        <div class='message'>
+            <mat-icon color="primary">done</mat-icon>
+            <span>Found {{found}} sub-claims</span>
+        </div>
+        </mat-card-footer>
+        <mat-card-footer *ngIf='found === 0'>
+        <div class='message'>
+            <mat-icon color="warn">problem</mat-icon>
+            <span>Failed to find any sub-claims</span>
+        </div>
+        </mat-card-footer>
+    </mat-card>
+</mat-expansion-panel>

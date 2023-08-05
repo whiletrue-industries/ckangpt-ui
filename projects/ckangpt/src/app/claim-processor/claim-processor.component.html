@@ -1,0 +1,5 @@
+<mat-accordion>
+    <app-claim-breaker [claim]='claim' (next)='subclaims = $event'></app-claim-breaker>
+    <app-query-generator *ngIf='subclaims && subclaims.length' [claims]='subclaims' (next)='queries = $event'></app-query-generator>
+    <app-dataset-finder *ngIf='queries && queries.length' [queries]='queries' [claim]='claim'></app-dataset-finder>
+</mat-accordion>

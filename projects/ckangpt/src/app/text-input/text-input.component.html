@@ -1,0 +1,31 @@
+<mat-card>
+    <mat-card-header>
+      <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+      <!-- <mat-card-title>Input text to analyze</mat-card-title> -->
+    </mat-card-header>
+    <mat-card-content>
+        <mat-form-field>
+            <mat-label>Enter Text to analyze</mat-label>
+            <textarea matInput [(ngModel)]="text" placeholder="Text to analyze..."></textarea>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions *ngIf='found < 0'>
+      <button mat-button (click)='analyze()' [disabled]='working'>ANALYZE</button>
+    </mat-card-actions>
+    <mat-card-footer *ngIf='working'>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+    <mat-card-footer *ngIf='found > 0'>
+      <div class='message'>
+        <mat-icon color="primary">done</mat-icon>
+        <span>Found {{found}} verifiable claims, processing...</span>
+      </div>
+    </mat-card-footer>
+    <mat-card-footer *ngIf='found === 0'>
+      <div class='message'>
+        <mat-icon color="warn">problem</mat-icon>
+        <span>Failed to find any verifiable claim (about Ontario!)</span>
+      </div>
+    </mat-card-footer>
+</mat-card>

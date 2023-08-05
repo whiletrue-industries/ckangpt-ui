@@ -3,5 +3,106 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "ckangpt": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less",
+          "skipTests": true
+        }
+      },
+      "root": "projects/ckangpt",
+      "sourceRoot": "projects/ckangpt/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/ckangpt",
+            "index": "projects/ckangpt/src/index.html",
+            "main": "projects/ckangpt/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/ckangpt/tsconfig.app.json",
+            "inlineStyleLanguage": "less",
+            "assets": [
+              "projects/ckangpt/src/favicon.ico",
+              "projects/ckangpt/src/assets"
+            ],
+            "styles": [
+              "projects/ckangpt/src/styles.less"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "ckangpt:build:production"
+            },
+            "development": {
+              "browserTarget": "ckangpt:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ckangpt:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/ckangpt/tsconfig.spec.json",
+            "inlineStyleLanguage": "less",
+            "assets": [
+              "projects/ckangpt/src/favicon.ico",
+              "projects/ckangpt/src/assets"
+            ],
+            "styles": [
+              "projects/ckangpt/src/styles.less"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
   }
 }
