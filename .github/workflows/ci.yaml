@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - main
+    # ignore changes to infra/app/values.auto-updated.yaml (this file is updated by the CI workflow itself)
+    paths-ignore:
+      - infra/app/values.auto-updated.yaml
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_APP_IMAGE_NAME: "ghcr.io/whiletrue-industries/ckangpt-ui/ckangpt-ui"
+        run: |
+          echo "${GITHUB_TOKEN}" | docker login ghcr.io -u whiletrue-industries --password-stdin &&\
+          if docker pull "${DOCKER_APP_IMAGE_NAME}:latest"; then
+            CACHE_FROM_ARG="--cache-from ${DOCKER_APP_IMAGE_NAME}:latest"
+          else
+            CACHE_FROM_ARG=""
+          fi &&\
+          docker build $CACHE_FROM_ARG --build-arg VERSION=${GITHUB_SHA} -t app . &&\
+          docker tag app "${DOCKER_APP_IMAGE_NAME}:${GITHUB_SHA}" &&\
+          docker push "${DOCKER_APP_IMAGE_NAME}:${GITHUB_SHA}" &&\
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            docker tag app "${DOCKER_APP_IMAGE_NAME}:latest" &&\
+            docker push "${DOCKER_APP_IMAGE_NAME}:latest" &&\
+            echo "ui:" > infra/app/values.auto-updated.yaml &&\
+            echo "  image: ${DOCKER_APP_IMAGE_NAME}:${GITHUB_SHA}" >> infra/app/values.auto-updated.yaml &&\
+            # commit and push the updated values.auto-updated.yaml file
+            git config --global user.name "ckangpt-ui CI" &&\
+            git config --global user.email "ckangpt-ui-ci@localhost" &&\
+            git add infra/app/values.auto-updated.yaml &&\
+            git commit -m "automatic update of ckangpt-ui" &&\
+            git push origin main
+          fi
