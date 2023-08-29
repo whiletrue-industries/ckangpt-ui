@@ -1,0 +1,3 @@
+api:
+  image: ghcr.io/whiletrue-industries/ckangpt-ui/ckangpt-ui:latest
+  resources: {}

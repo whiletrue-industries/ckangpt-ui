@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+spec:
+  selector:
+    matchLabels:
+      app: ui
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      terminationGracePeriodSeconds: 2
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      containers:
+      - name: ui
+        image: {{ .Values.ui.image | quote }}
+        resources: {{ toYaml .Values.ui.resources | nindent 10 }}
